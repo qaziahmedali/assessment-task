@@ -2,6 +2,7 @@ import { ObjectId } from 'mongodb';
 import clientPromise from '@/lib/mongodb';
 import { config } from '@/config';
 import { Task } from '@/models/task';
+import { SortOrder, TaskStatus } from '@/common/enums';
 
 export const taskRepository = {
   create: async (
@@ -59,16 +60,16 @@ export const taskRepository = {
 
   findByUser: async (
     userId: ObjectId,
-    status: 'completed' | 'inProgress' | 'all' = 'all',
+    status: TaskStatus,
     page: number = 1,
     limit: number = 10,
-    sortOrder: 'asc' | 'desc' = 'desc'
+    sortOrder: SortOrder = SortOrder.DESC
   ): Promise<{ tasks: Task[]; total: number }> => {
     const client = await clientPromise;
     const db = client.db(config.dbName);
 
     const query: any = { userId };
-    if (status !== 'all') {
+    if (status) {
       query.status = status;
     }
 

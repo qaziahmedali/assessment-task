@@ -5,8 +5,9 @@ import { errorResponseService } from '@/common/services/errorResponseService';
 import { successResponseService } from '@/common/services/successResponseService';
 import { authService } from '@/common/services/tokenService';
 import { genericValidator } from '@/common/genericValidator';
-import { getTaskCreationRules } from '@/validations/tasks';
+import { fetchTaskRules, getTaskCreationRules } from '@/validations/tasks';
 import { getBody } from '@/common/getBody';
+import { SortOrder, TaskStatus } from '@/common/enums';
 
 export const taskService = {
   createTask: async (req: NextRequest) => {
@@ -97,17 +98,26 @@ export const taskService = {
     }
 
     const { searchParams } = new URL(req.url);
+
+    // Convert URLSearchParams to a plain object
+    const queryParams = Object.fromEntries(searchParams.entries());
+
+    const validationErrors = genericValidator(queryParams, fetchTaskRules);
+    if (validationErrors) {
+      return errorResponseService.badRequest(validationErrors);
+    }
+
     const status = searchParams.get('status') || 'all';
     const page = searchParams.get('page') || '1';
     const limit = searchParams.get('limit') || '10';
-    const sort = searchParams.get('sort') || 'desc';
+    const order = searchParams.get('order') || 'desc';
 
     const tasks = await taskRepository.findByUser(
       new ObjectId(userId),
-      status as 'completed' | 'inProgress' | 'all',
+      status as TaskStatus,
       parseInt(page),
       parseInt(limit),
-      sort as 'asc' | 'desc'
+      order as SortOrder
     );
 
     return successResponseService.ok({

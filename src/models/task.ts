@@ -1,3 +1,4 @@
+import { TaskStatus } from '@/common/enums';
 import { ObjectId } from 'mongodb';
 
 export interface Task {
@@ -5,7 +6,7 @@ export interface Task {
   userId: ObjectId;
   title: string;
   description: string;
-  status: 'completed' | 'inProgress';
+  status: TaskStatus;
   createdAt: Date;
   updatedAt: Date;
 }
