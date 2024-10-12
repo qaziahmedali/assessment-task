@@ -11,12 +11,10 @@ export default function ClientLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <ThemeProvider>
-      <main className='flex-grow p-2 pt-14 pb-10 bg-white bg-white-800'>
-        <Header />
-        {children}
-        <Footer />
-      </main>
-    </ThemeProvider>
+    <main className='flex-grow p-2 pt-14 pb-10 bg-gray-300 dark:bg-white bg-white-8000'>
+      <Header />
+      {children}
+      <Footer />
+    </main>
   );
 }
