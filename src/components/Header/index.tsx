@@ -20,11 +20,25 @@ const Header = () => {
       <h1 className='text-2xl font-bold text-black dark:text-white'>
         Task Project
       </h1>
-      <div className='flex space-x-6 items-center'>
-        <Button variant='secondary' onClick={toggleTheme}>
-          {theme === 'light' ? 'Dark mode 🌙' : 'Light Mode ☀️'}
+      <div className='flex space-x-2 md:space-x-6 items-center'>
+        <Button
+          variant='secondary'
+          onClick={toggleTheme}
+          className='p-2 md:p-3'
+        >
+          <span className='hidden md:inline'>
+            {theme === 'light' ? 'Dark mode 🌙' : 'Light Mode ☀️'}
+          </span>
+          <span
+            className='md:hidden text-lg'
+            aria-label={
+              theme === 'light' ? 'Switch to Dark mode' : 'Switch to Light mode'
+            }
+          >
+            {theme === 'light' ? '🌙' : '☀️'}
+          </span>
         </Button>
-        <Button variant='secondary' onClick={onLogout}>
+        <Button variant='secondary' onClick={onLogout} className='p-2 md:p-3'>
           Logout
         </Button>
       </div>

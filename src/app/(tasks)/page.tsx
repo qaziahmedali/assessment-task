@@ -109,45 +109,52 @@ export default function Home() {
       className={`min-h-screen flex flex-col ${theme === 'dark' ? 'dark' : ''}`}
     >
       <RootLayout>
-        <div className='flex justify-between mb-4'>
-          <div className='flex space-x-5'>
-            <InputField
-              name='sortOrder'
-              label='Sort by Due Date'
-              type='select'
-              placeholder='Select Order'
-              options={[
-                { value: '', label: 'Sort By Order' },
-                { value: 'asc', label: 'Ascending' },
-                { value: 'desc', label: 'Descending' },
-              ]}
-              onChange={(e) => setSortOrder(e.target.value as SortOrder | '')}
-              value={sortOrder}
-              formik={false}
-            />
-
-            <InputField
-              name='statusFilter'
-              label='Filter by Status'
-              type='select'
-              placeholder='Select Status'
-              options={[
-                { value: '', label: 'All' },
-                { value: TaskStatus.Completed, label: 'Completed' },
-                { value: TaskStatus.InProgress, label: 'In Progress' },
-              ]}
-              onChange={(e) =>
-                setStatusFilter(e.target.value as TaskStatus | '')
-              }
-              value={statusFilter}
-              formik={false}
-            />
+        <div className='flex flex-col space-y-4 sm:flex-row sm:items-end sm:space-y-0 sm:space-x-4 mb-4'>
+          <div className='flex-grow sm:flex sm:space-x-4'>
+            <div className='w-full sm:w-auto mb-4 sm:mb-0'>
+              <InputField
+                name='sortOrder'
+                label='Sort by Due Date'
+                type='select'
+                placeholder='Select Order'
+                options={[
+                  { value: '', label: 'Sort By Order' },
+                  { value: SortOrder.ASC, label: 'Ascending' },
+                  { value: SortOrder.DESC, label: 'Descending' },
+                ]}
+                onChange={(e) => setSortOrder(e.target.value as SortOrder | '')}
+                value={sortOrder}
+                formik={false}
+              />
+            </div>
+            <div className='w-full sm:w-auto'>
+              <InputField
+                name='statusFilter'
+                label='Filter by Status'
+                type='select'
+                placeholder='Select Status'
+                options={[
+                  { value: '', label: 'All' },
+                  { value: TaskStatus.Completed, label: 'Completed' },
+                  { value: TaskStatus.InProgress, label: 'In Progress' },
+                ]}
+                onChange={(e) =>
+                  setStatusFilter(e.target.value as TaskStatus | '')
+                }
+                value={statusFilter}
+                formik={false}
+              />
+            </div>
           </div>
-          <div>
-            <Button onClick={() => setShowAddModal(true)}>Add Task</Button>
+          <div className='w-full sm:w-auto sm:flex-shrink-0 pb-5'>
+            <Button
+              onClick={() => setShowAddModal(true)}
+              className='w-full sm:w-auto'
+            >
+              Add Task
+            </Button>
           </div>
         </div>
-
         <TaskList
           tasks={data?.tasks}
           isLoading={isLoading}
