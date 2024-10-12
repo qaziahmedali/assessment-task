@@ -31,7 +31,7 @@ export default function Home() {
 
   const { data, isLoading, error, refetch } = useTasks(
     page,
-    10,
+    8,
     sortOrder || undefined,
     statusFilter || undefined
   );
@@ -45,13 +45,8 @@ export default function Home() {
 
   useEffect(() => {
     refetch();
+    setPage(1);
   }, [sortOrder, statusFilter, refetch]);
-
-  const loadMoreCards = () => {
-    if (page < totalPages) {
-      setPage(page + 1);
-    }
-  };
 
   const handleAddTask = (newTask: CreateTaskInput) => {
     createTaskMutation(newTask, {
@@ -91,6 +86,17 @@ export default function Home() {
     }
   };
 
+  const handlePrevPage = () => {
+    if (page > 1) {
+      setPage(page - 1);
+    }
+  };
+
+  const handleNextPage = () => {
+    if (page < totalPages) {
+      setPage(page + 1);
+    }
+  };
   if (error)
     return (
       <div className='text-red-500'>An error occurred: {error.message}</div>
@@ -151,22 +157,28 @@ export default function Home() {
           }}
         />
 
-        {page < totalPages && (
-          <div className='text-center mt-6'>
-            <Button onClick={loadMoreCards} disabled={isLoading}>
-              {isLoading ? 'Loading...' : 'Load More'}
+        {totalPages > 0 && (
+          <div className='flex justify-center items-center space-x-4 mt-6'>
+            <Button
+              onClick={handlePrevPage}
+              disabled={page === 1}
+              className={page === 1 ? 'opacity-50 cursor-not-allowed' : ''}
+            >
+              Previous
+            </Button>
+            <span className='text-gray-600 dark:text-gray-400'>
+              Page {page} of {totalPages}
+            </span>
+            <Button
+              onClick={handleNextPage}
+              disabled={page === totalPages}
+              className={
+                page === totalPages ? 'opacity-50 cursor-not-allowed' : ''
+              }
+            >
+              Next
             </Button>
           </div>
-        )}
-
-        {totalPages > 0 ? (
-          <div className='text-center mt-4'>
-            <p className='text-gray-600 dark:text-gray-400'>
-              Page {page} of {totalPages}
-            </p>
-          </div>
-        ) : (
-          <div></div>
         )}
       </RootLayout>
 
@@ -215,9 +227,18 @@ const TaskList: React.FC<{
 
   return (
     <div className='grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-6'>
-      {tasks?.map((task, index) => (
-        <TaskCard key={index} task={task} onEdit={onEdit} onDelete={onDelete} />
-      ))}
+      {isLoading ? (
+        <div className='text-black text-lg text-center'>Loading tasks...</div>
+      ) : (
+        tasks?.map((task, index) => (
+          <TaskCard
+            key={index}
+            task={task}
+            onEdit={onEdit}
+            onDelete={onDelete}
+          />
+        ))
+      )}
     </div>
   );
 };
