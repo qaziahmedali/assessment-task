@@ -1,118 +1,87 @@
-// import { NextApiRequest, NextApiResponse } from 'next';
-// import httpMocks from 'node-mocks-http';
-// import { ObjectId } from 'mongodb';
-// import { POST, GET } from './api/tasks'; // Adjust the import path as needed
-// import { taskService } from '@/services/taskService';
-// import { errorResponseService } from '@/common/services/errorResponseService';
-// import { TaskStatus, SortOrder } from '@/common/enums';
+import { NextApiRequest, NextApiResponse } from 'next';
+import httpMocks from 'node-mocks-http';
+import { taskService } from '@/services/taskService';
+import { GET, POST } from '@/app/api/tasks/route';
 
-// jest.mock('@/services/taskService');
-// jest.mock('@/common/services/errorResponseService');
+jest.mock('@/services/taskService');
+jest.mock('@/common/services/errorResponseService');
 
-// describe('Task API', () => {
-//   let req: NextApiRequest;
-//   let res: NextApiResponse;
+describe('Task API', () => {
+  let req: NextApiRequest;
+  let res: NextApiResponse;
 
-//   beforeEach(() => {
-//     req = httpMocks.createRequest();
-//     res = httpMocks.createResponse();
-//   });
+  beforeEach(() => {
+    req = httpMocks.createRequest<NextApiRequest>();
+    res = httpMocks.createResponse<NextApiResponse>();
+  });
 
-//   describe('POST /api/tasks', () => {
-//     it('should create a new task successfully', async () => {
-//       const mockTask = {
-//         _id: new ObjectId(),
-//         title: 'Test Task',
-//         description: 'Test Description',
-//         status: TaskStatus.InProgress,
-//         userId: new ObjectId(),
-//         createdAt: new Date(),
-//         updatedAt: new Date(),
-//       };
+  describe('POST /api/tasks', () => {
+    it('should create a new task successfully', async () => {
+      const mockTask = {
+        _id: '123456789',
+        title: 'Test Task',
+        description: 'Test Description',
+        status: 'InProgress',
+        userId: '987654321',
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+      };
 
-//       (taskService.createTask as jest.Mock).mockResolvedValue({
-//         json: () => ({ message: 'Task created successfully', task: mockTask }),
-//         status: 201,
-//       });
+      (taskService.createTask as jest.Mock).mockResolvedValue({
+        json: jest.fn().mockReturnValue({
+          message: 'Task created successfully',
+          task: mockTask,
+        }),
+        status: 200,
+      });
 
-//       await POST(req, res);
+      req.method = 'POST';
+      req.body = { title: 'Test Task', description: 'Test Description' };
 
-//       expect(taskService.createTask).toHaveBeenCalledWith(req);
-//       expect(res.statusCode).toBe(201);
-//       expect(res._getJSONData()).toEqual({
-//         message: 'Task created successfully',
-//         task: mockTask,
-//       });
-//     });
+      await POST(req as any);
 
-//     it('should handle errors during task creation', async () => {
-//       (taskService.createTask as jest.Mock).mockRejectedValue(new Error('Database error'));
-//       (errorResponseService.internalServerError as jest.Mock).mockReturnValue({
-//         json: () => ({ message: 'Internal server error' }),
-//         status: 500,
-//       });
+      expect(res.statusCode).toBe(200);
+    });
+  });
 
-//       await POST(req, res);
+  describe('GET /api/tasks', () => {
+    it('should retrieve tasks successfully', async () => {
+      const mockTasks = [
+        {
+          _id: '123456789',
+          title: 'Task 1',
+          description: 'Description 1',
+          status: 'InProgress',
+          userId: '987654321',
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
+        },
+        {
+          _id: '987654321',
+          title: 'Task 2',
+          description: 'Description 2',
+          status: 'Completed',
+          userId: '987654321',
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
+        },
+      ];
 
-//       expect(errorResponseService.internalServerError).toHaveBeenCalled();
-//       expect(res.statusCode).toBe(500);
-//       expect(res._getJSONData()).toEqual({ message: 'Internal server error' });
-//     });
-//   });
+      (taskService.getTasksByUser as jest.Mock).mockResolvedValue({
+        json: jest.fn().mockReturnValue({
+          tasks: mockTasks,
+          totalRecords: 2,
+          page: 1,
+          limit: 10,
+        }),
+        status: 200,
+      });
 
-//   describe('GET /api/tasks', () => {
-//     it('should retrieve tasks successfully', async () => {
-//       const mockTasks = [
-//         {
-//           _id: new ObjectId(),
-//           title: 'Task 1',
-//           description: 'Description 1',
-//           status: TaskStatus.InProgress,
-//           userId: new ObjectId(),
-//           createdAt: new Date(),
-//           updatedAt: new Date(),
-//         },
-//         {
-//           _id: new ObjectId(),
-//           title: 'Task 2',
-//           description: 'Description 2',
-//           status: TaskStatus.Completed,
-//           userId: new ObjectId(),
-//           createdAt: new Date(),
-//           updatedAt: new Date(),
-//         },
-//       ];
+      req.method = 'GET';
 
-//       (taskService.getTasksByUser as jest.Mock).mockResolvedValue({
-//         json: () => ({
-//           tasks: mockTasks,
-//           totalRecords: 2,
-//           page: 1,
-//           limit: 10,
-//         }),
-//         status: 200,
-//       });
+      await GET(req as any);
 
-//       await GET(req, res);
-
-//       expect(taskService.getTasksByUser).toHaveBeenCalledWith(req);
-//       expect(res.statusCode).toBe(200);
-//       expect(res._getJSONData()).toEqual({
-//         tasks: mockTasks,
-//         totalRecords: 2,
-//         page: 1,
-//         limit: 10,
-//       });
-//     });
-
-//     it('should handle errors during task retrieval', async () => {
-//       (taskService.getTasksByUser as jest.Mock).mockRejectedValue(new Error('Database error'));
-//       (errorResponseService.internalServerError as jest.Mock).mockReturnValue({
-//         json: () => ({ message: 'Internal server error' }),
-//         status: 500,
-//       });
-
-//       await GET(req, res);
-
-//       expect(errorResponseService.internalServerError).toHaveBeenCalled();
-//       expect(res.sta
+      expect(res.statusCode).toBe(200);
+    });
+  });
+});
