@@ -1,16 +1,9 @@
-import Footer from '@/components/Footer';
-import Header from '@/components/Header';
+import ClientLayout from './components/ClientLayout';
 
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  return (
-    <main className='flex-grow p-2 pt-14 pb-10 bg-white bg-white-800'>
-      <Header />
-      {children}
-      <Footer />
-    </main>
-  );
+  return <ClientLayout>{children}</ClientLayout>;
 }
