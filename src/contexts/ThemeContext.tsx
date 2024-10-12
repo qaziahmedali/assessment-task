@@ -20,16 +20,15 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({
     const savedTheme = localStorage.getItem('theme') as Theme | null;
     if (savedTheme) {
       setTheme(savedTheme);
+      document.documentElement.classList.toggle('dark', savedTheme === 'dark');
     }
   }, []);
 
-  useEffect(() => {
-    document.documentElement.classList.toggle('dark', theme === 'dark');
-    localStorage.setItem('theme', theme);
-  }, [theme]);
-
   const toggleTheme = () => {
-    setTheme((prevTheme) => (prevTheme === 'light' ? 'dark' : 'light'));
+    const newTheme = theme === 'light' ? 'dark' : 'light';
+    setTheme(newTheme);
+    localStorage.setItem('theme', newTheme);
+    document.documentElement.classList.toggle('dark', newTheme === 'dark');
   };
 
   return (

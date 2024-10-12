@@ -1,73 +1,113 @@
 'use client';
 
-import { useState } from 'react';
-import Layout from '@/components/Layout';
-import { useRouter } from 'next/navigation';
+import React from 'react';
+import Link from 'next/link';
+import { useFormik } from 'formik';
+import { useLogin } from '@/hooks/useAuth';
+import { loginValidationSchema } from '../validations/login';
 
-export default function Login() {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
-  const router = useRouter();
+const SignInForm: React.FC = () => {
+  const { mutate: login, isPending, isError, error } = useLogin();
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    try {
-      const res = await fetch('/api/auth/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username, password })
-      });
-      const data = await res.json();
-      if (res.ok) {
-        localStorage.setItem('token', data.token);
-        router.push('/dashboard');
-      } else {
-        setError(data.message);
-      }
-    } catch (error) {
-      setError('An error occurred. Please try again.');
-    }
-  };
+  const formik = useFormik({
+    initialValues: {
+      email: '',
+      password: '',
+    },
+    validationSchema: loginValidationSchema,
+    onSubmit: (values) => {
+      login(values);
+    },
+  });
 
   return (
-    <Layout>
-      <h1 className='text-2xl font-bold mb-4'>Login</h1>
-      <form onSubmit={handleSubmit} className='max-w-md'>
-        <div className='mb-4'>
-          <label htmlFor='username' className='block mb-2'>
-            Username
-          </label>
-          <input
-            type='text'
-            id='username'
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            className='w-full p-2 border rounded'
-            required
-          />
+    <div className='flex items-center justify-center min-h-screen bg-gray-100'>
+      <div className='container mx-auto max-w-md shadow-md rounded-md bg-white'>
+        <div className='p-6'>
+          <h4 className='text-2xl font-semibold text-center mb-4'>
+            Sign in to your account
+          </h4>
+          <form onSubmit={formik.handleSubmit}>
+            <div className='mb-4'>
+              <label className='block text-gray-700 font-semibold mb-1'>
+                Email
+              </label>
+              <input
+                type='email'
+                name='email'
+                placeholder='hello@example.com'
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                value={formik.values.email}
+                className={`form-input w-full px-4 py-2 border rounded-md ${
+                  formik.errors.email && formik.touched.email
+                    ? 'border-red-500'
+                    : 'border-gray-300'
+                }`}
+              />
+              {formik.errors.email && formik.touched.email && (
+                <p className='text-red-500 text-sm mt-1'>
+                  {formik.errors.email}
+                </p>
+              )}
+            </div>
+
+            <div className='mb-4'>
+              <label className='block text-gray-700 font-semibold mb-1'>
+                Password
+              </label>
+              <input
+                type='password'
+                name='password'
+                placeholder='Password'
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                value={formik.values.password}
+                className={`form-input w-full px-4 py-2 border rounded-md ${
+                  formik.errors.password && formik.touched.password
+                    ? 'border-red-500'
+                    : 'border-gray-300'
+                }`}
+              />
+              {formik.errors.password && formik.touched.password && (
+                <p className='text-red-500 text-sm mt-1'>
+                  {formik.errors.password}
+                </p>
+              )}
+            </div>
+
+            <div className='mt-6'>
+              <button
+                type='submit'
+                disabled={isPending}
+                className='w-full py-2 px-4 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-md transition-colors'
+              >
+                {isPending ? 'Signing in...' : 'Sign in'}
+              </button>
+            </div>
+
+            {isError && (
+              <p className='text-red-500 text-center mt-4'>
+                Error: {error.message}
+              </p>
+            )}
+          </form>
+
+          <div className='mt-6 text-center'>
+            <p>
+              Don't have an account?{' '}
+              <Link
+                href='/signup'
+                className='text-blue-600 hover:text-blue-800'
+              >
+                Sign up here
+              </Link>
+            </p>
+          </div>
         </div>
-        <div className='mb-4'>
-          <label htmlFor='password' className='block mb-2'>
-            Password
-          </label>
-          <input
-            type='password'
-            id='password'
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            className='w-full p-2 border rounded'
-            required
-          />
-        </div>
-        {error && <p className='text-red-500 mb-4'>{error}</p>}
-        <button
-          type='submit'
-          className='bg-blue-500 text-white px-4 py-2 rounded'
-        >
-          Login
-        </button>
-      </form>
-    </Layout>
+      </div>
+    </div>
   );
-}
+};
+
+export default SignInForm;
