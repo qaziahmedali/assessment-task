@@ -39,10 +39,10 @@ const SignInForm: React.FC = () => {
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
                 value={formik.values.email}
-                className={`form-input w-full px-4 py-2 border rounded-md ${
+                className={`form-input w-full px-4 py-2 border rounded-md text-black ${
                   formik.errors.email && formik.touched.email
                     ? 'border-red-500'
-                    : 'border-gray-300'
+                    : 'border-gray-900'
                 }`}
               />
               {formik.errors.email && formik.touched.email && (
@@ -63,7 +63,7 @@ const SignInForm: React.FC = () => {
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
                 value={formik.values.password}
-                className={`form-input w-full px-4 py-2 border rounded-md ${
+                className={`form-input w-full px-4 py-2 border rounded-md text-black ${
                   formik.errors.password && formik.touched.password
                     ? 'border-red-500'
                     : 'border-gray-300'

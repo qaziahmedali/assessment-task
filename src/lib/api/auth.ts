@@ -1,8 +1,4 @@
-// src/lib/api/auth.ts
-
-import axios from 'axios';
-
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000/api';
+import { axiosInstance } from '@/common/interceptors';
 
 export interface RegisterData {
   name: string;
@@ -21,19 +17,12 @@ export interface AuthResponse {
   token: string;
 }
 
-const authApi = axios.create({
-  baseURL: API_URL,
-  headers: {
-    'Content-Type': 'application/json',
-  },
-});
-
 export const register = async (data: RegisterData): Promise<AuthResponse> => {
-  const response = await authApi.post<AuthResponse>('/auth/signup', data);
+  const response = await axiosInstance.post<AuthResponse>('/auth/signup', data);
   return response.data;
 };
 
 export const login = async (data: LoginData): Promise<AuthResponse> => {
-  const response = await authApi.post<AuthResponse>('/auth/login', data);
+  const response = await axiosInstance.post<AuthResponse>('/auth/login', data);
   return response.data;
 };
