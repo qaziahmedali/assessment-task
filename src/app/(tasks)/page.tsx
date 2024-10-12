@@ -37,7 +37,7 @@ export default function Home() {
   );
   const { mutate: createTaskMutation, isPending: isCreating } = useCreateTask();
   const { mutate: updateTaskMutation, isPending: isUpdating } = useUpdateTask();
-  const deleteTaskMutation = useDeleteTask();
+  const { mutate: deleteTaskMutation, isPending: isDeleting } = useDeleteTask();
 
   const totalPages = data?.totalRecords
     ? Math.ceil(data.totalRecords / data.limit)
@@ -77,7 +77,7 @@ export default function Home() {
 
   const handleDeleteTask = () => {
     if (selectedTask) {
-      deleteTaskMutation.mutate(selectedTask._id, {
+      deleteTaskMutation(selectedTask._id, {
         onSuccess: () => {
           setShowDeleteModal(false);
           refetch();
@@ -209,6 +209,7 @@ export default function Home() {
         onClose={() => setShowDeleteModal(false)}
         onDelete={handleDeleteTask}
         taskTitle={'Task'}
+        isSubmitting={isDeleting}
       />
     </div>
   );
