@@ -78,7 +78,7 @@ export const taskRepository = {
     const tasks = await db
       .collection<Task>('tasks')
       .find(query)
-      .sort({ createdAt: sortOrder === 'asc' ? 1 : -1 })
+      .sort({ dueDate: sortOrder === 'asc' ? 1 : -1 })
       .skip((page - 1) * limit)
       .limit(limit)
       .toArray();

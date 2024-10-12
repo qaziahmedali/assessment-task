@@ -19,7 +19,7 @@ export const taskService = {
     const taskData = await getBody(req);
 
     // Validate task data
-    const getValidations = getTaskCreationRules(true);
+    const getValidations = getTaskCreationRules(false);
     const validationErrors = genericValidator(taskData, getValidations);
     if (validationErrors) {
       return errorResponseService.badRequest(validationErrors);
@@ -107,10 +107,10 @@ export const taskService = {
       return errorResponseService.badRequest(validationErrors);
     }
 
-    const status = searchParams.get('status') || 'all';
+    const status = searchParams.get('status');
     const page = searchParams.get('page') || '1';
     const limit = searchParams.get('limit') || '10';
-    const order = searchParams.get('order') || 'desc';
+    const order = searchParams.get('order');
 
     const tasks = await taskRepository.findByUser(
       new ObjectId(userId),

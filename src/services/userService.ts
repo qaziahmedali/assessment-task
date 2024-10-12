@@ -61,12 +61,12 @@ export const userService = {
 
     const user = await userRepository.findByEmail(email);
     if (!user) {
-      return errorResponseService.unauthorized('Invalid email or password');
+      return errorResponseService.unauthorized('User does not exist');
     }
 
     const isPasswordCorrect = await bcrypt.compare(password, user.password);
     if (!isPasswordCorrect) {
-      return errorResponseService.unauthorized('Invalid email or password');
+      return errorResponseService.unauthorized('Email and password is wrong');
     }
 
     const token = authService.generateToken(user._id.toString());
