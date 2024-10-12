@@ -1,3 +1,5 @@
+'use server';
+
 import { Task, CreateTaskInput, UpdateTaskInput } from '@/types/task';
 import { axiosInstance } from '@/common/interceptors';
 import { SortOrder, TaskStatus } from '@/common/enums';
