@@ -8,7 +8,8 @@ const ConfirmationModal: React.FC<{
   onClose: () => void;
   onDelete: () => void;
   taskTitle: string;
-}> = ({ isOpen, onClose, onDelete, taskTitle }) => (
+  isSubmitting: boolean;
+}> = ({ isOpen, onClose, onDelete, taskTitle, isSubmitting }) => (
   <Modal isOpen={isOpen} onClose={onClose}>
     <h3 className='text-lg font-bold mb-4 text-black'>
       Are you sure you want to delete {taskTitle}?
@@ -17,8 +18,8 @@ const ConfirmationModal: React.FC<{
       <Button variant='secondary' onClick={onClose} className='mr-2'>
         Cancel
       </Button>
-      <Button variant='danger' onClick={onDelete}>
-        Delete
+      <Button disabled={isSubmitting} variant='danger' onClick={onDelete}>
+        {isSubmitting ? 'Deleting...' : 'Delete'}
       </Button>
     </div>
   </Modal>
