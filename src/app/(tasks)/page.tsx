@@ -106,7 +106,9 @@ export default function Home() {
 
   return (
     <div
-      className={`min-h-screen flex flex-col ${theme === 'dark' ? 'dark' : ''}`}
+      className={`min-h-screen flex flex-col pt-3 ${
+        theme === 'dark' ? 'dark' : ''
+      }`}
     >
       <RootLayout>
         <div className='flex flex-col space-y-4 sm:flex-row sm:items-end sm:space-y-0 sm:space-x-4 mb-4'>
@@ -237,6 +239,18 @@ const TaskList: React.FC<{
       <div className='text-black text-lg text-center'>Loading tasks...</div>
     );
 
+  if (!tasks || tasks.length === 0) {
+    return (
+      <div className='inset-0 flex justify-center items-center p-4'>
+        <div className='text-black dark:text-white text-lg  w-[90%] md:w-[50%] text-center p-8 bg-gray-100 dark:bg-gray-800 rounded-lg shadow pt-10'>
+          <p>No tasks found.</p>
+          <p className='mt-2 text-sm text-gray-600 dark:text-gray-400'>
+            Try adding a new task or adjusting your filters.
+          </p>
+        </div>
+      </div>
+    );
+  }
   return (
     <div className='grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-6'>
       {isLoading ? (
