@@ -1,5 +1,3 @@
-// src/hooks/useAuth.ts
-
 import { useMutation, UseMutationResult } from '@tanstack/react-query';
 import {
   register,
@@ -21,7 +19,6 @@ export const useRegister = (): UseMutationResult<
   return useMutation({
     mutationFn: register,
     onSuccess: (data) => {
-      localStorage.setItem('token', data.token);
       router.push('/');
     },
   });
@@ -38,7 +35,6 @@ export const useLogin = (): UseMutationResult<
   return useMutation({
     mutationFn: login,
     onSuccess: (data) => {
-      localStorage.setItem('token', data.token);
       router.push('/');
     },
   });

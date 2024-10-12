@@ -1,23 +1,4 @@
-import { ObjectId } from 'mongodb';
-
-export interface User {
-  _id: ObjectId;
-  name: string;
-  email: string;
-  password: string;
-  createdAt: Date;
-  updatedAt: Date;
-}
-
-export interface Task {
-  _id: ObjectId;
-  userId: ObjectId;
-  title: string;
-  description: string;
-  status: 'completed' | 'inProgress';
-  createdAt: Date;
-  updatedAt: Date;
-}
+import { User } from '@/models/user';
 
 export interface LoginCredentials {
   email: string;

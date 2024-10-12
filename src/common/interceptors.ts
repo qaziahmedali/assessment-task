@@ -1,4 +1,5 @@
 import { config } from '@/config';
+import { getToken } from '@/lib/api/auth';
 import axios from 'axios';
 
 export const axiosInstance = axios.create({
@@ -9,8 +10,8 @@ export const axiosInstance = axios.create({
 });
 
 axiosInstance.interceptors.request.use(
-  (config) => {
-    const token = localStorage.getItem('token');
+  async (config) => {
+    const token = await getToken();
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }

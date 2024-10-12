@@ -1,16 +1,11 @@
-import {
-  Task,
-  CreateTaskInput,
-  UpdateTaskInput,
-  TasksResponse,
-} from '@/types/task';
+import { Task, CreateTaskInput, UpdateTaskInput } from '@/types/task';
 import { axiosInstance } from '@/common/interceptors';
 import { SortOrder, TaskStatus } from '@/common/enums';
 
 export const getTasks = async (
   page = 1,
   limit = 10,
-  order?: 'asc' | 'desc',
+  order?: SortOrder,
   status?: TaskStatus
 ) => {
   const params = new URLSearchParams({

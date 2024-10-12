@@ -2,7 +2,7 @@ import { ActionsMode } from '@/common/enums';
 import Button from '@/components/Button';
 import InputField from '@/components/InputField';
 import Modal from '@/components/Modal';
-import { Task } from '@/types';
+import { Task } from '@/models/task';
 import {
   CreateTaskInput,
   UpdateTaskInput,
