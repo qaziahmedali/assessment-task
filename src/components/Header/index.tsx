@@ -21,13 +21,9 @@ const Header = () => {
         Task Project
       </h1>
       <div className='flex space-x-6 items-center'>
-        <button
-          onClick={toggleTheme}
-          className='px-4 py-2 bg-indigo-600 text-white rounded-md shadow-md hover:bg-indigo-500 transition'
-        >
-          {theme === 'light' ? 'Dark Mode' : 'Light Mode'}
-        </button>
-
+        <Button variant='secondary' onClick={toggleTheme}>
+          {theme === 'light' ? 'Dark mode 🌙' : 'Light Mode ☀️'}
+        </Button>
         <Button variant='secondary' onClick={onLogout}>
           Logout
         </Button>

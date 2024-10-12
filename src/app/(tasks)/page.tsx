@@ -19,6 +19,7 @@ import ConfirmationModal from '@/components/ConfirmationModal';
 import TaskCard from './components/TaskCard';
 import { ActionsMode, SortOrder, TaskStatus } from '@/common/enums';
 import InputField from '@/components/InputField';
+import { useTheme } from '@/contexts/ThemeContext';
 
 export default function Home() {
   const [page, setPage] = useState(1);
@@ -101,9 +102,12 @@ export default function Home() {
     return (
       <div className='text-red-500'>An error occurred: {error.message}</div>
     );
+  const { theme } = useTheme();
 
   return (
-    <div className='min-h-screen flex flex-col'>
+    <div
+      className={`min-h-screen flex flex-col ${theme === 'dark' ? 'dark' : ''}`}
+    >
       <RootLayout>
         <div className='flex justify-between mb-4'>
           <div className='flex space-x-5'>
