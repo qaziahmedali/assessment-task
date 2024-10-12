@@ -22,7 +22,7 @@ export const useRegister = (): UseMutationResult<
     mutationFn: register,
     onSuccess: (data) => {
       localStorage.setItem('token', data.token);
-      router.push('/dashboard');
+      router.push('/');
     },
   });
 };
@@ -39,7 +39,7 @@ export const useLogin = (): UseMutationResult<
     mutationFn: login,
     onSuccess: (data) => {
       localStorage.setItem('token', data.token);
-      router.push('/dashboard');
+      router.push('/');
     },
   });
 };

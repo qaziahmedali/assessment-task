@@ -28,7 +28,7 @@ export const taskService = {
     const newTask = await taskRepository.create({
       ...taskData,
       userId: new ObjectId(userId),
-      status: taskData?.status || 'inProgress',
+      status: taskData?.status || TaskStatus.InProgress,
     });
 
     return successResponseService.created({

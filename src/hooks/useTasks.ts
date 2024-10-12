@@ -12,16 +12,17 @@ import {
   UpdateTaskInput,
   TasksResponse,
 } from '@/types/task';
+import { SortOrder, TaskStatus } from '@/common/enums';
 
 export const useTasks = (
-  status?: string,
   page: number = 1,
   limit: number = 10,
-  sort: 'asc' | 'desc' = 'desc'
+  order?: SortOrder,
+  status?: TaskStatus
 ) => {
   return useQuery<TasksResponse, Error>({
-    queryKey: ['tasks', status, page, limit, sort],
-    queryFn: () => getTasks({ status, page, limit, sort }),
+    queryKey: ['tasks', page, limit, order, status],
+    queryFn: () => getTasks(page, limit, order, status),
   });
 };
 

@@ -1,5 +1,3 @@
-// src/types/task.ts
-
 export interface Task {
   _id: string;
   userId: string;
@@ -20,11 +18,18 @@ export interface UpdateTaskInput {
   title?: string;
   description?: string;
   status?: 'completed' | 'inProgress';
+  dueDate: any;
+}
+export interface UpdateTaskInputWithTimeStamp extends UpdateTaskInput {
+  _id: string;
+  updatedAt: string;
+  createdAt: string;
+  userId: string;
 }
 
 export interface TasksResponse {
   tasks: Task[];
-  total: number;
+  totalRecords: number;
   page: number;
   limit: number;
 }

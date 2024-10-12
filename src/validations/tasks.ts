@@ -1,4 +1,3 @@
-import { isValidISODate } from '@/common/dateHelper';
 import { TaskStatus } from '@/common/enums';
 import { ValidationRule } from '@/common/interface';
 
@@ -20,19 +19,6 @@ export const getTaskCreationRules = (isUpdate: boolean) => {
       {
         validator: (value: string) => typeof value === 'string',
         message: 'description must be a string.',
-        optional: isUpdate,
-      },
-      {
-        validator: (value: string) => value.length <= 500,
-        message: 'description must not exceed 500 characters.',
-        optional: isUpdate,
-      },
-    ],
-    dueDate: [
-      {
-        validator: (value: string) => isValidISODate(value),
-        message:
-          'dueDate must be a valid ISO 8601 date string (YYYY-MM-DDTHH:mm:ss.sssZ).',
         optional: isUpdate,
       },
     ],
